@@ -12,17 +12,25 @@ def main():
     print("模糊匹配合并服务 - 演示示例")
     print("=" * 70)
 
-    print("\n【1】字符串相似度计算示例")
+    print("\n【1】多种相似度算法对比示例")
     print("-" * 70)
+    algorithms = ["difflib", "levenshtein", "jaccard", "cosine"]
     test_pairs = [
         ("Apple Inc.", "Apple Inc"),
         ("Microsoft Corporation", "Microsft Corp"),
+        ("Amazon.com Inc", "Amazon"),
         ("Google", "Alphabet"),
         ("腾讯科技", "腾讯科技有限公司"),
     ]
+    print(f"{'字符串对':<45} {'difflib':>8} {'levenshtein':>11} {'jaccard':>8} {'cosine':>8}")
+    print("-" * 90)
     for s1, s2 in test_pairs:
-        score = calculate_similarity(s1, s2)
-        print(f"'{s1}' vs '{s2}' => 相似度: {score:.4f}")
+        scores = []
+        for algo in algorithms:
+            score = calculate_similarity(s1, s2, algorithm=algo)
+            scores.append(f"{score:.4f}")
+        pair_str = f"'{s1}' vs '{s2}'"
+        print(f"{pair_str:<45} {scores[0]:>8} {scores[1]:>11} {scores[2]:>8} {scores[3]:>8}")
 
     print("\n【2】查找最佳匹配示例")
     print("-" * 70)
@@ -118,6 +126,21 @@ def main():
         right_on="company",
     )
     print(report.to_string(index=False))
+
+    print("\n【8】多种算法模糊合并效果对比 (阈值=0.6)")
+    print("-" * 70)
+    for algo in ["difflib", "levenshtein", "jaccard", "cosine"]:
+        print(f"\n--- 使用 {algo} 算法 ---")
+        merged_algo = fuzzy_merge(
+            df_sales,
+            df_stock,
+            left_on="company_name",
+            right_on="company",
+            threshold=0.6,
+            how="left",
+            algorithm=algo,
+        )
+        print(merged_algo[["company_name", "company", "similarity", "algorithm"]].to_string(index=False))
 
     print("\n" + "=" * 70)
     print("演示完成!")
