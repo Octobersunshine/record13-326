@@ -75,9 +75,20 @@ def main():
     print("\n右表 (股票数据):")
     print(df_stock.to_string(index=False))
 
-    print("\n【4】模糊匹配合并示例 (左连接, 阈值=0.6)")
+    print("\n【4】模糊匹配合并示例 (左连接, 默认阈值=0.8)")
     print("-" * 70)
     merged_df = fuzzy_merge(
+        df_sales,
+        df_stock,
+        left_on="company_name",
+        right_on="company",
+        how="left",
+    )
+    print(merged_df.to_string(index=False))
+
+    print("\n【5】阈值对比：低阈值=0.6 (可能导致误匹配)")
+    print("-" * 70)
+    merged_low = fuzzy_merge(
         df_sales,
         df_stock,
         left_on="company_name",
@@ -85,28 +96,26 @@ def main():
         threshold=0.6,
         how="left",
     )
-    print(merged_df.to_string(index=False))
+    print(merged_low.to_string(index=False))
 
-    print("\n【5】模糊匹配合并示例 (外连接, 阈值=0.7)")
+    print("\n【6】模糊匹配合并示例 (外连接, 默认阈值=0.8)")
     print("-" * 70)
     merged_outer = fuzzy_merge(
         df_sales,
         df_stock,
         left_on="company_name",
         right_on="company",
-        threshold=0.7,
         how="outer",
     )
     print(merged_outer.to_string(index=False))
 
-    print("\n【6】匹配报告示例 (显示 Top 5 候选)")
+    print("\n【7】匹配报告示例 (显示 Top 5 候选, 默认阈值=0.8)")
     print("-" * 70)
     report = fuzzy_match_report(
         df_sales,
         df_stock,
         left_on="company_name",
         right_on="company",
-        threshold=0.3,
     )
     print(report.to_string(index=False))
 

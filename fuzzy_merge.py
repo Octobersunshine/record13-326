@@ -15,7 +15,7 @@ def calculate_similarity(str1: str, str2: str, ignore_case: bool = True) -> floa
 def find_best_match(
     target: str,
     candidates: List[str],
-    threshold: float = 0.6,
+    threshold: float = 0.8,
     ignore_case: bool = True,
     top_n: int = 1,
 ) -> Union[Optional[Tuple[str, float]], List[Tuple[str, float]]]:
@@ -42,7 +42,7 @@ def fuzzy_merge(
     right_df: pd.DataFrame,
     left_on: str,
     right_on: str,
-    threshold: float = 0.6,
+    threshold: float = 0.8,
     ignore_case: bool = True,
     how: str = "left",
     include_similarity: bool = True,
@@ -121,7 +121,7 @@ def fuzzy_match_report(
     right_df: pd.DataFrame,
     left_on: str,
     right_on: str,
-    threshold: float = 0.6,
+    threshold: float = 0.8,
     ignore_case: bool = True,
 ) -> pd.DataFrame:
     if left_on not in left_df.columns:
